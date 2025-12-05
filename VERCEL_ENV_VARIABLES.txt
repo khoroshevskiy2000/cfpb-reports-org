@@ -2,36 +2,45 @@
 ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ ДЛЯ VERCEL
 ===================================================================
 
-Скопируйте эти переменные в Vercel:
-Settings → Environment Variables
+⚠️ ВАЖНО: Обновите эти переменные на Vercel прямо сейчас!
 
-Добавьте для всех окружений (Production, Preview, Development):
-
--------------------------------------------------------------------
-
-VITE_SUPABASE_URL=https://0ec90b57d6e95fcbda19832f.supabase.co
-
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJib2x0IiwicmVmIjoiMGVjOTBiNTdkNmU5NWZjYmRhMTk4MzJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4ODE1NzQsImV4cCI6MTc1ODg4MTU3NH0.9I8-U0x86Ak8t2DGaIk0HfvTSLsAyzdnz-Nw00mMkKw
+Перейдите: https://vercel.com/dashboard
+→ Выберите проект cfpb-reports-org2
+→ Settings → Environment Variables
+→ Удалите старые переменные
+→ Добавьте новые для всех окружений (Production, Preview, Development)
 
 -------------------------------------------------------------------
 
-ДАННЫЕ ДЛЯ ВХОДА В АДМИНКУ:
+VITE_SUPABASE_URL=https://fneytkrjjdccamoulcqp.supabase.co
+
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZuZXl0a3JqamRjY2Ftb3VsY3FwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ5NTA5MTUsImV4cCI6MjA4MDUyNjkxNX0.MzRlNp_JCfxxVYYB_LjQ-AhU_PLVtkxqMCtj0zzyaLI
+
+-------------------------------------------------------------------
+
+После обновления переменных:
+1. Нажмите "Deployments" в Vercel
+2. Найдите последний деплой
+3. Нажмите "..." → "Redeploy"
+4. Выберите "Use existing Build Cache" → Redeploy
+
+-------------------------------------------------------------------
+
+✅ ДАННЫЕ ДЛЯ ВХОДА В АДМИНКУ (УЖЕ СОЗДАНЫ):
+
 Email: admin@example.com
 Password: admin123456
 
-URL админки: https://ваш-домен.vercel.app/admin/login
+URL админки: https://cfpb-reports-org2.vercel.app/admin/login
 
 -------------------------------------------------------------------
 
-ВАЖНО: После первого деплоя создайте админ пользователя одним из способов:
-
-1. Через Supabase Dashboard:
-   Authentication → Users → Add user
-   Email: admin@example.com
-   Password: admin123456
-   ✓ Auto Confirm Email
-
-2. Через SQL Editor в Supabase:
-   См. DEPLOYMENT_INSTRUCTIONS.md
+СОСТОЯНИЕ БАЗЫ ДАННЫХ:
+✅ Таблица cases создана
+✅ Таблица contact_submissions создана
+✅ Storage bucket case-pdfs создан
+✅ Все RLS политики настроены
+✅ Edge Functions задеплоены
+✅ Администратор создан
 
 ===================================================================

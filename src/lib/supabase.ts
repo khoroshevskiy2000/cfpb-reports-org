@@ -19,7 +19,7 @@ export interface Case {
   phone_number: string;
   date_of_birth: string | null;
   country: string;
-  total_retrieved_amount: number;
+  total_retrieved_amount: string;
   transaction_id: string | null;
   platform: string | null;
   payment_required: string;
