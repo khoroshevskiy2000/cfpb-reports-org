@@ -1,0 +1,37 @@
+===================================================================
+ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ ДЛЯ VERCEL
+===================================================================
+
+Скопируйте эти переменные в Vercel:
+Settings → Environment Variables
+
+Добавьте для всех окружений (Production, Preview, Development):
+
+-------------------------------------------------------------------
+
+VITE_SUPABASE_URL=https://0ec90b57d6e95fcbda19832f.supabase.co
+
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJib2x0IiwicmVmIjoiMGVjOTBiNTdkNmU5NWZjYmRhMTk4MzJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4ODE1NzQsImV4cCI6MTc1ODg4MTU3NH0.9I8-U0x86Ak8t2DGaIk0HfvTSLsAyzdnz-Nw00mMkKw
+
+-------------------------------------------------------------------
+
+ДАННЫЕ ДЛЯ ВХОДА В АДМИНКУ:
+Email: admin@example.com
+Password: admin123456
+
+URL админки: https://ваш-домен.vercel.app/admin/login
+
+-------------------------------------------------------------------
+
+ВАЖНО: После первого деплоя создайте админ пользователя одним из способов:
+
+1. Через Supabase Dashboard:
+   Authentication → Users → Add user
+   Email: admin@example.com
+   Password: admin123456
+   ✓ Auto Confirm Email
+
+2. Через SQL Editor в Supabase:
+   См. DEPLOYMENT_INSTRUCTIONS.md
+
+===================================================================
