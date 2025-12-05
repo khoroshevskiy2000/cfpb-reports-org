@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAdmin } from '../context/AdminContext';
-import { Plus, Edit2, Trash2, X, Save, LogOut, Upload, Search, Mail } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Save, LogOut, Upload, Search, Mail, FileSpreadsheet } from 'lucide-react';
+import * as XLSX from 'xlsx';
 
 interface Case {
   id: string;
@@ -308,6 +309,68 @@ function Admin() {
     }
   };
 
+  const handleExportToExcel = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('cases')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      const excelData = data.map((caseItem) => ({
+        'Case Number': caseItem.case_number,
+        'Status': caseItem.status,
+        'Full Name': caseItem.full_name,
+        'ID Number': caseItem.id_number,
+        'Email': caseItem.email,
+        'Phone Number': caseItem.phone_number,
+        'Date of Birth': caseItem.date_of_birth || '',
+        'Country': caseItem.country,
+        'Total Retrieved Amount': caseItem.total_retrieved_amount,
+        'Transaction ID': caseItem.transaction_id || '',
+        'Platform': caseItem.platform || '',
+        'Payment Required': caseItem.payment_required,
+        'PDF File Name': caseItem.pdf_file_name || '',
+        'PDF File URL': caseItem.pdf_file_url || '',
+        'PDF Uploaded At': caseItem.pdf_uploaded_at ? new Date(caseItem.pdf_uploaded_at).toLocaleString() : '',
+        'Created At': new Date(caseItem.created_at).toLocaleString(),
+        'Updated At': new Date(caseItem.updated_at).toLocaleString(),
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(excelData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Cases');
+
+      const colWidths = [
+        { wch: 15 },
+        { wch: 12 },
+        { wch: 25 },
+        { wch: 15 },
+        { wch: 30 },
+        { wch: 18 },
+        { wch: 15 },
+        { wch: 20 },
+        { wch: 25 },
+        { wch: 20 },
+        { wch: 15 },
+        { wch: 20 },
+        { wch: 30 },
+        { wch: 50 },
+        { wch: 20 },
+        { wch: 20 },
+        { wch: 20 },
+      ];
+      worksheet['!cols'] = colWidths;
+
+      const fileName = `CFPB_Cases_${new Date().toISOString().split('T')[0]}.xlsx`;
+      XLSX.writeFile(workbook, fileName);
+    } catch (err) {
+      setError('Failed to export to Excel');
+      console.error(err);
+    }
+  };
+
   const statusOptions = ['Active', 'Blocked', 'Pending', 'On Hold', 'Received'];
 
   const filteredCases = cases.filter(caseItem =>
@@ -334,6 +397,13 @@ function Admin() {
               />
               <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
             </div>
+            <button
+              onClick={handleExportToExcel}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition shadow-md hover:shadow-lg flex items-center gap-2"
+            >
+              <FileSpreadsheet className="w-5 h-5" />
+              Скачать Excel
+            </button>
             <button
               onClick={() => handleOpenModal()}
               className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition shadow-md hover:shadow-lg flex items-center gap-2"
