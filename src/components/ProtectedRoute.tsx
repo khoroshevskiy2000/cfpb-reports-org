@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAdmin } from '../context/AdminContext';
 
@@ -7,18 +6,9 @@ interface ProtectedRouteProps {
 }
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { isAuthenticated } = useAdmin();
-  const [isLoading, setIsLoading] = useState(true);
+  const { isAuthenticated, isInitializing } = useAdmin();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (isLoading) {
+  if (isInitializing) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -30,7 +20,7 @@ function ProtectedRoute({ children }: ProtectedRouteProps) {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/admin/login" replace />;
+    return <Navigate to="/admin" replace />;
   }
 
   return <>{children}</>;

@@ -80,9 +80,9 @@ function Admin() {
   const [contactSubmissions, setContactSubmissions] = useState<ContactSubmission[]>([]);
   const [loadingSubmissions, setLoadingSubmissions] = useState(false);
 
-  const handleLogout = () => {
-    logout();
-    navigate('/admin/login');
+  const handleLogout = async () => {
+    await logout();
+    navigate('/admin', { replace: true });
   };
 
   useEffect(() => {

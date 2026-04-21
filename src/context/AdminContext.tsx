@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 
 interface AdminContextType {
   isAuthenticated: boolean;
+  isInitializing: boolean;
   login: (username: string, password: string) => Promise<boolean>;
   logout: () => Promise<void>;
 }
@@ -11,21 +12,40 @@ const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 export function AdminProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isInitializing, setIsInitializing] = useState<boolean>(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    let isMounted = true;
+
+    const applySession = (session: unknown) => {
+      if (!isMounted) {
+        return;
+      }
+
       setIsAuthenticated(!!session);
-    });
+      setIsInitializing(false);
+    };
+
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        applySession(session);
+      })
+      .catch((error) => {
+        console.error('Failed to restore admin session:', error);
+        applySession(null);
+      });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      (async () => {
-        setIsAuthenticated(!!session);
-      })();
+      applySession(session);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const login = async (username: string, password: string): Promise<boolean> => {
@@ -50,7 +70,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AdminContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AdminContext.Provider value={{ isAuthenticated, isInitializing, login, logout }}>
       {children}
     </AdminContext.Provider>
   );
